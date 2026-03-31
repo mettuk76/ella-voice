@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ella's Voice">
+<title>Ella's Voice 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#FFF9F0;font-family:'Nunito',sans-serif}
+.app{background:#FFF9F0;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#FF9F43;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.header-title{font-size:19px;font-weight:800;color:#fff}
+.header-sub{font-size:11px;color:rgba(255,255,255,0.85);margin-top:1px}
+.hbtns{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lang-toggle{background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.5);border-radius:24px;padding:0;display:flex;overflow:hidden;cursor:pointer}
+.lang-opt{padding:6px 12px;font-size:12px;font-weight:800;color:rgba(255,255,255,0.75);transition:all 0.2s;white-space:nowrap}
+.lang-opt.active{background:#fff;color:#FF9F43;border-radius:22px}
+.edit-toggle{background:rgba(255,255,255,0.25);border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap}
+.edit-toggle.active{background:#fff;color:#FF9F43}
+.speech-bar{background:#fff;border-bottom:2px solid #FFD580;padding:10px 12px;display:flex;align-items:center;gap:8px;min-height:54px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.chip{background:#FFF3D6;border:2px solid #FFB74D;border-radius:30px;padding:5px 12px;font-size:13px;font-weight:700;color:#D4730A;display:flex;align-items:center;gap:5px;cursor:pointer}
+.chip:hover{background:#FFE0A0}
+.ph{color:#BDBDBD;font-size:13px;font-style:italic}
+.btn-speak{background:#FF9F43;color:#fff;border:none;border-radius:12px;padding:9px 13px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.btn-speak:active{opacity:0.85}
+.btn-clear{background:#FFE0E0;color:#D32F2F;border:none;border-radius:8px;padding:7px 10px;font-size:13px;font-weight:700;cursor:pointer}
+.breadcrumb{padding:8px 14px;display:flex;align-items:center;gap:5px;font-size:12px;color:#888;background:#FFF9F0;border-bottom:1px solid #FFE5A0;flex-wrap:wrap}
+.bc-item{cursor:pointer;color:#FF9F43;font-weight:700;padding:2px 6px;border-radius:6px}
+.bc-sep{color:#CCC}
+.bc-cur{color:#666;font-weight:600}
+.back-btn{display:inline-flex;align-items:center;gap:6px;margin:10px 14px 0;padding:7px 12px;background:#FFF3D6;border:2px solid #FFD580;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:#D4730A}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px;flex:1}
+.card{background:#fff;border-radius:16px;border:2.5px solid #FFD580;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none;position:relative;min-height:110px;justify-content:center;gap:5px;-webkit-tap-highlight-color:rgba(255,159,67,0.2)}
+.card:active{transform:scale(0.96);border-color:#FF9F43}
+.card.has-ch::after{content:'';position:absolute;bottom:7px;right:9px;width:7px;height:7px;border-right:2px solid #FFB74D;border-bottom:2px solid #FFB74D;transform:rotate(-45deg)}
+.card-img{width:52px;height:52px;border-radius:10px;object-fit:cover}
+.card-emoji{font-size:36px;line-height:1}
+.card-label{font-size:12px;font-weight:800;color:#444;text-align:center;word-break:keep-all;line-height:1.3}
+.card-label2{font-size:10px;font-weight:700;color:#BBAA88;text-align:center;line-height:1.2}
+.card-sub{font-size:10px;color:#AAA;text-align:center}
+.edit-badge{position:absolute;top:6px;right:6px;display:none;gap:4px}
+.edit-mode .edit-badge{display:flex}
+.eb{width:24px;height:24px;border-radius:50%;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.eb-edit{background:#FFE0A0;color:#D4730A}
+.eb-del{background:#FFE0E0;color:#D32F2F}
+.add-card{background:#FFF9F0;border:2.5px dashed #FFD580;border-radius:16px;display:none;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:110px;gap:6px}
+.edit-mode .add-card{display:flex}
+.add-icon{font-size:26px;color:#FFB74D}
+.add-label{font-size:11px;font-weight:700;color:#FFB74D}
+.bottom-bar{background:#FFF3D6;border-top:2px solid #FFD580;padding:9px 14px;display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.quick-btn{background:#fff;border:2px solid #FFB74D;border-radius:24px;padding:8px 13px;font-size:13px;font-weight:800;color:#D4730A;cursor:pointer;display:flex;align-items:center;gap:4px;-webkit-tap-highlight-color:rgba(255,159,67,0.2)}
+.quick-btn:active{background:#FFE5A0}
+.speaking{display:none;align-items:center;gap:5px;font-size:11px;color:#fff;font-weight:700}
+.speaking.on{display:flex}
+.dot span{display:inline-block;width:5px;height:5px;background:#fff;border-radius:50%;animation:bop 1s infinite}
+.dot span:nth-child(2){animation-delay:.15s}
+.dot span:nth-child(3){animation-delay:.3s}
+@keyframes bop{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:100;align-items:flex-start;justify-content:center;padding-top:30px;overflow-y:auto}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;width:92%;max-width:360px;padding:18px;display:flex;flex-direction:column;gap:12px;margin-bottom:30px}
+.modal-title{font-size:15px;font-weight:800;color:#444}
+.modal input[type=text]{width:100%;border:2px solid #FFD580;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;color:#444;outline:none;font-family:inherit}
+.modal input[type=text]:focus{border-color:#FF9F43}
+.inp-label{font-size:11px;font-weight:700;color:#888;margin-bottom:3px}
+.img-upload-area{border:2px dashed #FFD580;border-radius:12px;padding:16px;text-align:center;cursor:pointer}
+.img-preview{width:80px;height:80px;border-radius:10px;object-fit:cover;margin:0 auto;display:block}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.mbtn{border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.mbtn-ok{background:#FF9F43;color:#fff}
+.mbtn-cancel{background:#EEE;color:#666}
+.emoji-row{display:flex;flex-wrap:wrap;gap:5px;max-height:100px;overflow-y:auto}
+.eopt{font-size:22px;cursor:pointer;padding:5px;border-radius:8px}
+.eopt.sel{background:#FFE5A0}
+.tab-row{display:flex;gap:6px;margin-bottom:4px}
+.tab{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:#FFF3D6;color:#D4730A;border:2px solid #FFD580}
+.tab.active{background:#FF9F43;color:#fff;border-color:#FF9F43}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="header">
+    <div>
+      <div class="header-title">🌟 Ella's Voice</div>
+      <div class="header-sub" id="headerSub">Choose what you want!</div>
+    </div>
+    <div class="hbtns">
+      <div class="speaking" id="spk"><div class="dot"><span></span><span></span><span></span></div><span id="spkTxt">Speaking</span></div>
+      <div class="lang-toggle">
+        <div class="lang-opt" id="langKO" onclick="setLang('ko')">한국어</div>
+        <div class="lang-opt active" id="langEN" onclick="setLang('en')">English</div>
+      </div>
+      <button class="edit-toggle" id="editToggle" onclick="toggleEdit()">✏️ Edit</button>
+    </div>
+  </div>
+
+  <div class="speech-bar">
+    <div class="chips" id="chips"><span class="ph" id="ph">Choose below 👇</span></div>
+    <button class="btn-clear" id="clearBtn" style="display:none" onclick="clearAll()">✕</button>
+    <button class="btn-speak" onclick="speak()" id="speakBtn">🔊 Speak</button>
+  </div>
+
+  <div class="breadcrumb" id="bc"></div>
+  <div id="backWrap"></div>
+  <div class="grid" id="grid"></div>
+  <div class="bottom-bar" id="bottomBar"></div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">Add Item</div>
+    <div class="tab-row">
+      <div class="tab active" id="tabBtnEmoji" onclick="switchTab('emoji')">Emoji</div>
+      <div class="tab" id="tabBtnPhoto" onclick="switchTab('photo')">Photo</div>
+    </div>
+    <div id="tabEmoji"><div class="emoji-row" id="emojiRow"></div></div>
+    <div id="tabPhoto" style="display:none">
+      <div class="img-upload-area" onclick="document.getElementById('fileInput').click()">
+        <img id="imgPreview" class="img-preview" style="display:none">
+        <div id="uploadHint" style="font-size:13px;font-weight:700;color:#FFB74D">📷 Tap to upload photo</div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+    </div>
+    <div><div class="inp-label">한국어 이름 (Korean)</div><input type="text" id="modalLabelKO" placeholder="예: 밥, 물, 엄마"></div>
+    <div><div class="inp-label">English label</div><input type="text" id="modalLabelEN" placeholder="e.g. Rice, Water, Mum"></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="hasCh" style="width:18px;height:18px;accent-color:#FF9F43">
+      <label for="hasCh" style="font-size:12px;font-weight:700;color:#666">Has sub-items</label>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="mbtn mbtn-ok" onclick="saveItem()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMOJIS=['🍽️','🍚','🍞','🍜','🍎','🍪','🥣','🥤','💧','🥛','🧃','☕','😊','😄','😢','😠','😴','😨','🤒','🤕','🤯','🫃','🦵','💪','🦷','🎮','📺','🎵','🌳','🎨','🛁','🚽','🧸','👨‍👩‍👧','👩','👨','👩‍🏫','🧒','👩‍⚕️','🐶','🐱','⭐','🌈','🎈','🏠','🚗','✈️','🎁','🎂','🌸','🍦','🏊','🎠','🌙'];
+const UI={
+  ko:{headerSub:'원하는 것을 눌러봐요!',ph:'아래에서 원하는 것을 골라요 👇',speak:'🔊 말하기',edit:'✏️ 편집',done:'✅ 완료',back:'← 뒤로',addLabel:'추가',spkTxt:'말하는 중',
+    quick:[{t:'네',e:'✅'},{t:'아니요',e:'❌'},{t:'도와주세요',e:'🆘'},{t:'잠깐만요',e:'✋'}],
+    modalAdd:'항목 추가',modalEdit:'항목 편집',subMore:'눌러서 더 보기',uploadHint:'📷 사진을 탭해서 업로드'},
+  en:{headerSub:'Choose what you want!',ph:'Choose below 👇',speak:'🔊 Speak',edit:'✏️ Edit',done:'✅ Done',back:'← Back',addLabel:'Add',spkTxt:'Speaking',
+    quick:[{t:'Yes',e:'✅'},{t:'No',e:'❌'},{t:'Help me',e:'🆘'},{t:'Wait',e:'✋'}],
+    modalAdd:'Add Item',modalEdit:'Edit Item',subMore:'Tap for more',uploadHint:'📷 Tap to upload photo'}
+};
+const DEF=[
+  {id:'food',ko:'음식 먹고 싶어요',en:'I want food',emoji:'🍽️',children:[
+    {id:'rice',ko:'밥',en:'Rice',emoji:'🍚'},{id:'bread',ko:'빵',en:'Bread',emoji:'🍞'},
+    {id:'noodle',ko:'국수',en:'Noodles',emoji:'🍜'},{id:'fruit',ko:'과일',en:'Fruit',emoji:'🍎'},
+    {id:'snack',ko:'과자',en:'Snack',emoji:'🍪'},{id:'soup',ko:'국',en:'Soup',emoji:'🥣'}]},
+  {id:'drink',ko:'마시고 싶어요',en:'I want a drink',emoji:'🥤',children:[
+    {id:'water',ko:'물',en:'Water',emoji:'💧'},{id:'milk',ko:'우유',en:'Milk',emoji:'🥛'},
+    {id:'juice',ko:'주스',en:'Juice',emoji:'🧃'},{id:'cocoa',ko:'코코아',en:'Cocoa',emoji:'☕'}]},
+  {id:'feel',ko:'기분이에요',en:'I feel',emoji:'😊',children:[
+    {id:'happy',ko:'기뻐요',en:'Happy',emoji:'😄'},{id:'sad',ko:'슬퍼요',en:'Sad',emoji:'😢'},
+    {id:'angry',ko:'화나요',en:'Angry',emoji:'😠'},{id:'tired',ko:'피곤해요',en:'Tired',emoji:'😴'},
+    {id:'scared',ko:'무서워요',en:'Scared',emoji:'😨'},{id:'sick',ko:'아파요',en:'I feel sick',emoji:'🤒'}]},
+  {id:'pain',ko:'아파요',en:'It hurts',emoji:'🤕',children:[
+    {id:'head',ko:'머리',en:'My head',emoji:'🤯'},{id:'tummy',ko:'배',en:'My tummy',emoji:'🫃'},
+    {id:'leg',ko:'다리',en:'My leg',emoji:'🦵'},{id:'arm',ko:'팔',en:'My arm',emoji:'💪'},
+    {id:'teeth',ko:'이가',en:'My teeth',emoji:'🦷'}]},
+  {id:'activity',ko:'하고 싶어요',en:'I want to',emoji:'🎮',children:[
+    {id:'tv',ko:'TV 보기',en:'Watch TV',emoji:'📺'},{id:'music',ko:'음악 듣기',en:'Listen to music',emoji:'🎵'},
+    {id:'outside',ko:'밖에 나가기',en:'Go outside',emoji:'🌳'},{id:'draw',ko:'그림 그리기',en:'Draw',emoji:'🎨'},
+    {id:'sleep',ko:'자고 싶어요',en:'Sleep',emoji:'😴'},{id:'play',ko:'놀고 싶어요',en:'Play',emoji:'🧸'},
+    {id:'bath',ko:'씻고 싶어요',en:'Take a bath',emoji:'🛁'},{id:'toilet',ko:'화장실',en:'Toilet',emoji:'🚽'}]},
+  {id:'people',ko:'사람이에요',en:'People',emoji:'👨‍👩‍👧',children:[
+    {id:'mom',ko:'엄마',en:'Mum',emoji:'👩'},{id:'dad',ko:'아빠',en:'Dad',emoji:'👨'},
+    {id:'teacher',ko:'선생님',en:'Teacher',emoji:'👩‍🏫'},{id:'friend',ko:'친구',en:'Friend',emoji:'🧒'},
+    {id:'doctor',ko:'의사 선생님',en:'Doctor',emoji:'👩‍⚕️'}]}
+];
+let root={ko:'홈',en:'Home',children:JSON.parse(JSON.stringify(DEF))};
+let path=[root],lang='en',editMode=false,selEmoji=EMOJIS[0],uploadedImg=null,activeTab='emoji',editingItem=null;
+function u(){return UI[lang]}
+function cur(){return path[path.length-1]}
+function uid(){return 'id'+Date.now()+Math.random().toString(36).slice(2,6)}
+function L(item,f){if(f==='label') return item[lang]||item.ko||item.en||'';if(f==='label2') return lang==='en'?item.ko:item.en;return item[f]}
+function setLang(l){lang=l;document.getElementById('langKO').classList.toggle('active',l==='ko');document.getElementById('langEN').classList.toggle('active',l==='en');updateUI();render()}
+function updateUI(){const t=u();document.getElementById('headerSub').textContent=t.headerSub;document.getElementById('speakBtn').textContent=t.speak;document.getElementById('spkTxt').textContent=t.spkTxt;document.getElementById('editToggle').textContent=editMode?t.done:t.edit;const ph=document.getElementById('ph');if(ph)ph.textContent=t.ph;renderQuickBtns()}
+function renderQuickBtns(){const bar=document.getElementById('bottomBar');bar.innerHTML='';u().quick.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.innerHTML=q.e+' '+q.t;b.onclick=()=>quickSay(q.t,q.e);bar.appendChild(b)})}
+function render(){
+  const node=cur();const g=document.getElementById('grid');const bc=document.getElementById('bc');const bw=document.getElementById('backWrap');
+  g.innerHTML='';
+  if(editMode)g.classList.add('edit-mode');else g.classList.remove('edit-mode');
+  (node.children||[]).forEach(item=>{
+    const d=document.createElement('div');const hasCh=item.children&&item.children.length;
+    d.className='card'+(hasCh?' has-ch':'');
+    const label=L(item,'label');const label2=L(item,'label2');
+    d.innerHTML=`<div class="edit-badge"><button class="eb eb-edit" onclick="openEdit(event,'${item.id}')">✏</button><button class="eb eb-del" onclick="delItem(event,'${item.id}')">✕</button></div>${item.img?`<img class="card-img" src="${item.img}" alt="${label}">`:`<div class="card-emoji">${item.emoji}</div>`}<div class="card-label">${label}</div><div class="card-label2">${label2}</div>${hasCh?`<div class="card-sub">${u().subMore}</div>`:''}`;
+    d.onclick=(e)=>{if(editMode&&(e.target.classList.contains('eb')||e.target.closest('.eb')))return;if(!editMode){if(hasCh){path.push(item);render()}else addChip(label,item.emoji,item.img)}};
+    g.appendChild(d);
+  });
+  if(editMode){const add=document.createElement('div');add.className='card add-card';add.style.display='flex';add.innerHTML=`<div class="add-icon">＋</div><div class="add-label">${u().addLabel}</div>`;add.onclick=()=>openAdd();g.appendChild(add)}
+  bc.innerHTML='';
+  path.forEach((n,i)=>{const label=n[lang]||n.ko||n.en||'Home';if(i===path.length-1){const s=document.createElement('span');s.className='bc-cur';s.textContent=label;bc.appendChild(s)}else{const s=document.createElement('span');s.className='bc-item';s.textContent=label;s.onclick=()=>{path=path.slice(0,i+1);render()};bc.appendChild(s);const sep=document.createElement('span');sep.className='bc-sep';sep.textContent='›';bc.appendChild(sep)}});
+  bw.innerHTML='';
+  if(path.length>1){const b=document.createElement('button');b.className='back-btn';b.textContent=u().back;b.onclick=()=>{path.pop();render()};bw.appendChild(b)}
+}
+function toggleEdit(){editMode=!editMode;document.getElementById('editToggle').textContent=editMode?u().done:u().edit;if(editMode)document.getElementById('editToggle').classList.add('active');else document.getElementById('editToggle').classList.remove('active');render()}
+function findItem(id,list){for(const item of list){if(item.id===id)return{item,list};if(item.children){const r=findItem(id,item.children);if(r)return r}}return null}
+function openAdd(){editingItem=null;uploadedImg=null;selEmoji=EMOJIS[0];document.getElementById('modalTitle').textContent=u().modalAdd;document.getElementById('modalLabelKO').value='';document.getElementById('modalLabelEN').value='';document.getElementById('hasCh').checked=false;document.getElementById('imgPreview').style.display='none';document.getElementById('uploadHint').style.display='block';document.getElementById('uploadHint').textContent=u().uploadHint;switchTab('emoji');buildEmojiRow();document.getElementById('overlay').classList.add('show')}
+function openEdit(e,id){e.stopPropagation();const r=findItem(id,root.children);if(!r)return;editingItem=r.item;uploadedImg=r.item.img||null;selEmoji=r.item.emoji||EMOJIS[0];document.getElementById('modalTitle').textContent=u().modalEdit;document.getElementById('modalLabelKO').value=r.item.ko||'';document.getElementById('modalLabelEN').value=r.item.en||'';document.getElementById('hasCh').checked=!!(r.item.children);if(r.item.img){document.getElementById('imgPreview').src=r.item.img;document.getElementById('imgPreview').style.display='block';document.getElementById('uploadHint').style.display='none';switchTab('photo')}else{switchTab('emoji')}buildEmojiRow();document.getElementById('overlay').classList.add('show')}
+function delItem(e,id){e.stopPropagation();const r=findItem(id,root.children);if(!r)return;const idx=r.list.indexOf(r.item);if(idx>-1)r.list.splice(idx,1);render()}
+function saveItem(){const ko=document.getElementById('modalLabelKO').value.trim();const en=document.getElementById('modalLabelEN').value.trim();if(!ko&&!en)return;const hasCh=document.getElementById('hasCh').checked;if(editingItem){editingItem.ko=ko;editingItem.en=en;if(activeTab==='emoji')editingItem.emoji=selEmoji;editingItem.img=activeTab==='photo'?uploadedImg:null;if(hasCh&&!editingItem.children)editingItem.children=[];else if(!hasCh)delete editingItem.children}else{const ni={id:uid(),ko,en,emoji:activeTab==='emoji'?selEmoji:'🖼️'};if(activeTab==='photo'&&uploadedImg)ni.img=uploadedImg;if(hasCh)ni.children=[];(cur().children=cur().children||[]).push(ni)}closeModal();render()}
+function closeModal(){document.getElementById('overlay').classList.remove('show');editingItem=null;uploadedImg=null}
+function switchTab(tab){activeTab=tab;document.getElementById('tabBtnEmoji').classList.toggle('active',tab==='emoji');document.getElementById('tabBtnPhoto').classList.toggle('active',tab==='photo');document.getElementById('tabEmoji').style.display=tab==='emoji'?'':'none';document.getElementById('tabPhoto').style.display=tab==='photo'?'':'none'}
+function buildEmojiRow(){const row=document.getElementById('emojiRow');row.innerHTML='';EMOJIS.forEach(em=>{const s=document.createElement('span');s.className='eopt'+(em===selEmoji?' sel':'');s.textContent=em;s.onclick=()=>{selEmoji=em;buildEmojiRow()};row.appendChild(s)})}
+function handleFile(inp){const file=inp.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{uploadedImg=e.target.result;const prev=document.getElementById('imgPreview');prev.src=uploadedImg;prev.style.display='block';document.getElementById('uploadHint').style.display='none'};r.readAsDataURL(file)}
+function addChip(label,emoji,img){const ph=document.getElementById('ph');if(ph)ph.remove();document.getElementById('clearBtn').style.display='';const chips=document.getElementById('chips');const c=document.createElement('div');c.className='chip';c.innerHTML=`<span style="font-size:15px">${img?'🖼️':emoji}</span>${label}`;c.onclick=()=>{c.remove();checkChips()};chips.appendChild(c)}
+function checkChips(){if(!document.querySelectorAll('.chip').length){document.getElementById('clearBtn').style.display='none';const chips=document.getElementById('chips');const p=document.createElement('span');p.className='ph';p.id='ph';p.textContent=u().ph;chips.appendChild(p)}}
+function clearAll(){document.getElementById('chips').innerHTML='';document.getElementById('clearBtn').style.display='none';const p=document.createElement('span');p.className='ph';p.id='ph';p.textContent=u().ph;document.getElementById('chips').appendChild(p)}
+function quickSay(text,emoji){addChip(text,emoji,null);setTimeout(speak,100)}
+function speak(){const chips=document.querySelectorAll('.chip');if(!chips.length)return;const text=Array.from(chips).map(c=>c.textContent.trim()).join(', ');const spk=document.getElementById('spk');spk.classList.add('on');if('speechSynthesis' in window){const utt=new SpeechSynthesisUtterance(text);utt.lang=lang==='ko'?'ko-KR':'en-NZ';utt.rate=0.85;utt.pitch=1.1;utt.onend=()=>spk.classList.remove('on');speechSynthesis.cancel();speechSynthesis.speak(utt)}else{setTimeout(()=>spk.classList.remove('on'),2000)}}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+updateUI();render();
+</script>
+</body>
+</html>
